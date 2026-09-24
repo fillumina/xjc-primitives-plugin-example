@@ -57,8 +57,8 @@ class, following the getter and the setter:
 | a field an `exclude` selector names | `protected byte scale;` | `protected byte scale;`, unchanged |
 
 The reason is that a primitive cannot be absent: without the boxed type, a field the document never
-carried is indistinguishable from a zero or a `false`, and no constraint can be put on a primitive
-to tell the two apart.
+carried is indistinguishable from a zero or a `false`, and `@NotNull` on it can never fail. The
+boxed class makes the absence a `null` the constraint can report.
 
 ## Building
 
