@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.fillumina</groupId>
+  <artifactId>xjc-primitives-plugin-example</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+  <name>xjc-primitives-plugin-example</name>
+
+  <description>
+    An example of the xjc-primitives-plugin inside a real build, and the functional test of that
+    wiring: jaxb-maven-plugin runs the plugin over a schema whose fields are primitives, the
+    generated sources are compiled by the same build, and a test reads the types that came out.
+  </description>
+
+  <url>https://github.com/fillumina/xjc-primitives-plugin-example/</url>
+
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.release>21</maven.compiler.release>
+    <jaxb.version>4.0.9</jaxb.version>
+    <junit.version>6.1.3</junit.version>
+    <!-- the version of the artifact this example exercises: a release, or a snapshot after
+         'mvn install' in the project itself -->
+    <xjc-primitives-plugin.version>1.0.0-SNAPSHOT</xjc-primitives-plugin.version>
+  </properties>
+
+  <dependencies>
+    <!-- the generated classes need this to compile -->
+    <dependency>
+      <groupId>jakarta.xml.bind</groupId>
+      <artifactId>jakarta.xml.bind-api</artifactId>
+      <version>4.0.5</version>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.jaxb</groupId>
+      <artifactId>jaxb-runtime</artifactId>
+      <version>${jaxb.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.platform</groupId>
+      <artifactId>junit-platform-launcher</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>3.6.0</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.16.0</version>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <version>3.6.3</version>
+        <executions>
+          <execution>
+            <id>enforce-versions</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <requireJavaVersion>
+                  <version>[21,)</version>
+                </requireJavaVersion>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!--
+        The whole point of the example: the plugin is a dependency of the codegen plugin, and it is
+        selected and configured the way the README of the project documents. The exclude selector
+        leaves one field a primitive, so the example shows the option and the contrast it makes.
+      -->
+      <plugin>
+        <groupId>org.jvnet.jaxb</groupId>
+        <artifactId>jaxb-maven-plugin</artifactId>
+        <version>${jaxb.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <extension>true</extension>
+          <schemaDirectory>${project.basedir}/src/main/xsd</schemaDirectory>
+          <args>
+            <arg>-p</arg>
+            <arg>com.example.meter</arg>
+            <arg>-XReplacePrimitives</arg>
+            <arg>-XReplacePrimitives:exclude=*#scale</arg>
+          </args>
+          <plugins>
+            <plugin>
+              <groupId>com.fillumina</groupId>
+              <artifactId>xjc-primitives-plugin</artifactId>
+              <version>${xjc-primitives-plugin.version}</version>
+            </plugin>
+          </plugins>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

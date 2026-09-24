@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="https://example.test/meter"
+    xmlns:mtr="https://example.test/meter"
+    elementFormDefault="qualified">
+
+  <xsd:element name="meter" type="mtr:meterType"/>
+
+  <xsd:complexType name="meterType">
+    <xsd:sequence>
+      <xsd:element name="serial" type="xsd:string"/>
+      <xsd:element name="reading" type="xsd:long"/>
+      <xsd:element name="precision" type="xsd:short"/>
+      <xsd:element name="scale" type="xsd:byte"/>
+      <xsd:element name="factor" type="xsd:double"/>
+      <xsd:element name="offset" type="xsd:float"/>
+      <xsd:element name="active" type="xsd:boolean"/>
+    </xsd:sequence>
+    <xsd:attribute name="calibrated" type="xsd:boolean" use="required"/>
+  </xsd:complexType>
+
+</xsd:schema>
