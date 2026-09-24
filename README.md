@@ -86,3 +86,7 @@ carry where a primitive would have reported zero.
 It is the consumer path — the plugin reached through the codegen plugin of a real build — and not a
 replacement for the test suite of the project, which is where the behaviour of the plugin itself is
 pinned.
+
+The three plugins of this line together in one build, which is where the split is shown to do what
+the single plugin did, are in
+[`xjc-plugins-example`](https://github.com/fillumina/xjc-plugins-example).
