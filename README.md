@@ -1,6 +1,6 @@
-# xjc-primitives-plugin-example
-
 [![Maven Central](https://img.shields.io/maven-central/v/com.fillumina/xjc-primitives-plugin.svg)](https://central.sonatype.com/artifact/com.fillumina/xjc-primitives-plugin)
+
+# xjc-primitives-plugin-example
 
 The badge is the release of `xjc-primitives-plugin` this example pins, the one a build resolves
 from Central.
